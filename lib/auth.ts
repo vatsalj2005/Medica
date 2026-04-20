@@ -101,3 +101,34 @@ export function clearSession(): void {
   if (typeof window === 'undefined') return;
   localStorage.removeItem('mediapp_session');
 }
+
+export async function checkEmailExists(email: string): Promise<boolean> {
+  // Check patient table
+  const { data: patientData } = await supabase
+    .from('patient')
+    .select('email')
+    .eq('email', email)
+    .maybeSingle();
+  
+  if (patientData) return true;
+
+  // Check doctor table
+  const { data: doctorData } = await supabase
+    .from('doctor')
+    .select('email')
+    .eq('email', email)
+    .maybeSingle();
+    
+  if (doctorData) return true;
+
+  // Check receptionist table
+  const { data: receptionistData } = await supabase
+    .from('receptionist')
+    .select('email')
+    .eq('email', email)
+    .maybeSingle();
+    
+  if (receptionistData) return true;
+
+  return false;
+}

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
+import { checkEmailExists } from '@/lib/auth';
 import bcrypt from 'bcryptjs';
 import Link from 'next/link';
 
@@ -75,6 +76,13 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
+      const emailExists = await checkEmailExists(formData.email);
+      if (emailExists) {
+        setErrors({ email: 'Email already registered in the system' });
+        setLoading(false);
+        return;
+      }
+
       const patientId = await generatePatientId();
       const hashedPassword = await bcrypt.hash(formData.password, 10);
 
