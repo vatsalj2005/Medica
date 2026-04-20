@@ -407,21 +407,6 @@ Every module has one reason to change:
 ### 2. Open/Closed Principle (OCP)
 The `loginUser()` function in `lib/auth.ts` is open for extension (add a new role by appending a new block) but closed for modification (existing patient/doctor/receptionist logic is never touched when adding a new role). Similarly, the `Badge` component accepts a `variant` prop — new variants can be added without changing existing ones.
 
-### 3. DRY — Don't Repeat Yourself
-Utility functions are extracted and reused:
-- `getStatusColor(status)` — used in both doctor appointments and receptionist scheduled pages
-- `getTypeColor(type)` — reused for medical history type badges
-- `formatDate(dateString)` — consistent date formatting across all pages
-- `getInitials(name)` — avatar initials generation used in doctor and patient cards
-
-### 4. Separation of Concerns (SoC)
-The codebase cleanly separates:
-- **Data access** → `lib/supabaseClient.ts`, `lib/auth.ts`
-- **Business logic** → inside page-level handler functions (`checkTimeConflict`, `validateForm`, `generateAppointmentId`)
-- **UI rendering** → React components and page JSX
-- **Global state** → `context/ToastContext.tsx`
-- **Routing/Auth guard** → layout files (`doctor/layout.tsx`, `patient/layout.tsx`, `receptionist/layout.tsx`)
-
 ---
 
 ## OOP Concepts Applied
