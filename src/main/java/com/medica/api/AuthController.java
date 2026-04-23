@@ -15,6 +15,12 @@ public class AuthController {
     private final AuthService authService = new AuthService();
     private final RegistrationService registrationService = new RegistrationService();
 
+    // GET /api/auth/ping — keeps Render awake
+    @GetMapping("/ping")
+    public ResponseEntity<?> ping() {
+        return ResponseEntity.ok(Map.of("status", "ok"));
+    }
+
     // POST /api/auth/login
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> body) {

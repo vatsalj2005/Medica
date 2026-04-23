@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { api } from "@/lib/api";
@@ -11,6 +11,15 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [warming, setWarming] = useState(true);
+
+  // Ping the backend as soon as the login page loads to wake Render up
+  useEffect(() => {
+    const BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+    fetch(`${BASE}/api/auth/ping`, { method: "GET" })
+      .catch(() => {}) // ignore errors — just waking it up
+      .finally(() => setWarming(false));
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +49,17 @@ export default function LoginPage() {
             <p className="text-[#94a3b8] mt-1">Sign in to your account</p>
           </div>
 
-          {error && <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">{error}</div>}
+          {warming && (
+            <div className="mb-4 p-3 bg-indigo-500/10 border border-indigo-500/30 rounded-lg text-indigo-400 text-sm text-center">
+              ⏳ Waking up server, please wait a moment...
+            </div>
+          )}
+
+          {error && (
+            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
+              {error}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {[
@@ -49,19 +68,24 @@ export default function LoginPage() {
             ].map(f => (
               <div key={f.label}>
                 <label className="block text-sm font-medium text-[#f1f5f9] mb-2">{f.label}</label>
-                <input type={f.type} value={f.value} onChange={e => f.onChange(e.target.value)} required placeholder={f.placeholder}
+                <input type={f.type} value={f.value} onChange={e => f.onChange(e.target.value)}
+                  required placeholder={f.placeholder}
                   className="w-full px-4 py-3 bg-[#0f1117] border border-[#2a2d3a] rounded-xl text-white placeholder-[#94a3b8] focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all" />
               </div>
             ))}
-            <button type="submit" disabled={loading}
+            <button type="submit" disabled={loading || warming}
               className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2">
-              {loading ? <><span className="animate-spin">⟳</span> Signing in...</> : "Sign In"}
+              {loading ? <><span className="animate-spin">⟳</span> Signing in...</>
+                : warming ? "Waiting for server..."
+                : "Sign In"}
             </button>
           </form>
 
           <p className="mt-6 text-center text-[#94a3b8] text-sm">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-indigo-400 hover:text-indigo-300 font-semibold">Register as Patient</Link>
+            <Link href="/register" className="text-indigo-400 hover:text-indigo-300 font-semibold">
+              Register as Patient
+            </Link>
           </p>
         </div>
       </div>
