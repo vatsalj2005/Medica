@@ -1,0 +1,16 @@
+# Compiled class files
+target/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+
+# Maven
+*.log
+
+# Config with secrets
+config.properties
