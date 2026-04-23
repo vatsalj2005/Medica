@@ -2,9 +2,118 @@
 @tailwind components;
 @tailwind utilities;
 
-body { background-color: #0f1117; color: #f1f5f9; }
+/* ── Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-.animate-fade-in { animation: fadeIn 0.3s ease; }
-.animate-slide-in { animation: slideIn 0.3s ease; }
+body {
+  background-color: #080e08;
+  color: #e8f5e8;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #0f1a0f; }
+::-webkit-scrollbar-thumb { background: #1e321e; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #254525; }
+
+/* ── Skeleton shimmer ─────────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, #0f1a0f 25%, #162016 50%, #0f1a0f 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
+  border-radius: 0.5rem;
+}
+
+/* ── Button press feel ────────────────────────────────────────────── */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 font-semibold rounded-xl
+         transition-all duration-150 select-none cursor-pointer
+         active:scale-[0.96] active:brightness-90;
+  transform-origin: center;
+}
+.btn:focus-visible { outline: 2px solid #22c55e; outline-offset: 2px; }
+.btn:disabled { @apply opacity-50 cursor-not-allowed pointer-events-none; }
+
+.btn-primary {
+  @apply btn bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/30
+         hover:shadow-green-800/40 hover:-translate-y-px;
+}
+.btn-danger {
+  @apply btn bg-red-700 hover:bg-red-600 text-white shadow-lg shadow-red-900/30
+         hover:-translate-y-px;
+}
+.btn-ghost {
+  @apply btn bg-transparent hover:bg-[#162016] text-[#6aaa6a] hover:text-[#e8f5e8]
+         border border-[#1e321e] hover:border-[#254525];
+}
+.btn-outline-green {
+  @apply btn border border-green-700/50 text-green-400 hover:bg-green-500/10
+         hover:border-green-500/60;
+}
+
+/* ── Input base ───────────────────────────────────────────────────── */
+.input {
+  @apply w-full px-4 py-3 bg-[#080e08] border border-[#1e321e] rounded-xl
+         text-[#e8f5e8] placeholder-[#3d6b3d]
+         focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20
+         transition-all duration-200;
+}
+
+/* ── Card ─────────────────────────────────────────────────────────── */
+.card {
+  @apply bg-[#0f1a0f] border border-[#1e321e] rounded-2xl;
+}
+
+/* ── Page transition wrapper ──────────────────────────────────────── */
+.page-enter {
+  animation: fadeUp 0.35s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+/* ── Status badge ─────────────────────────────────────────────────── */
+.badge-scheduled { @apply px-2.5 py-1 rounded-full text-xs border bg-green-500/10 text-green-400 border-green-500/30; }
+.badge-completed { @apply px-2.5 py-1 rounded-full text-xs border bg-emerald-500/10 text-emerald-300 border-emerald-500/30; }
+.badge-cancelled { @apply px-2.5 py-1 rounded-full text-xs border bg-red-500/10 text-red-400 border-red-500/30; }
+.badge-requested { @apply px-2.5 py-1 rounded-full text-xs border bg-yellow-500/10 text-yellow-400 border-yellow-500/30; }
+.badge-type      { @apply px-2.5 py-1 rounded-full text-xs border bg-green-500/10 text-green-400 border-green-500/30; }
+.badge-blood     { @apply px-2.5 py-1 rounded-full text-xs border bg-red-500/10 text-red-400 border-red-500/30; }
+
+/* ── Table ────────────────────────────────────────────────────────── */
+.table-row {
+  @apply border-b border-[#1e321e] last:border-0 transition-colors duration-150
+         hover:bg-[#080e08]/60;
+}
+
+/* ── Stat card ────────────────────────────────────────────────────── */
+.stat-card {
+  @apply card p-6 transition-all duration-200 hover:border-[#254525] hover:-translate-y-0.5;
+}
+
+/* ── Nav link ─────────────────────────────────────────────────────── */
+.nav-link {
+  @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium
+         transition-all duration-150 text-[#6aaa6a]
+         hover:bg-[#162016] hover:text-[#e8f5e8];
+}
+.nav-link-active {
+  @apply bg-green-700/80 text-white shadow-md shadow-green-900/40;
+}
+
+/* ── Animations (legacy compat) ───────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+.animate-fade-in  { animation: fadeUp 0.35s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-slide-in { animation: toastSlide 0.35s cubic-bezier(0.16,1,0.3,1) both; }
+
+@keyframes toastSlide {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.animate-toast-slide { animation: toastSlide 0.35s cubic-bezier(0.16,1,0.3,1) both; }
