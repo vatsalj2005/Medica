@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: medica-api
+    runtime: java
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -jar target/medica-1.0.jar
+    envVars:
+      - key: DB_URL
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false

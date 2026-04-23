@@ -1,33 +1,26 @@
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Java
+*.class
+*.jar
+!lib/*.jar
+*.war
+*.ear
+target/
+*.iml
+.idea/
+.vscode/
 
-# testing
-/coverage
+# Maven
+.mvn/
+mvn.cmd
+mvnw
+mvnw.cmd
 
-# next.js
-/.next/
-/out/
+# Database config (never commit this — contains credentials)
+config.properties
 
-# production
-/build
-
-# misc
+# OS
 .DS_Store
-*.pem
+Thumbs.db
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# local env file
-.env.local
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# Logs
+*.log
