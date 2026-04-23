@@ -1,0 +1,8 @@
+# Supabase PostgreSQL Connection
+# Replace with your actual Supabase project credentials
+# The connection URL format for Supabase:
+# jdbc:postgresql://<project-ref>.supabase.co:5432/postgres
+
+db.url=jdbc:postgresql://your-project-ref.supabase.co:5432/postgres
+db.user=postgres
+db.password=your_supabase_db_password
